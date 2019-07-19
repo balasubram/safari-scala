@@ -39,10 +39,24 @@ object Date { // object is the place for "static" features
   }
 }
 
+class Holiday(day: Int, month:Int, year: Int, val name:String)
+  extends Date(day, month, year) {
+  override def toString: String = super.toString + " a holiday called " + name
+}
+
 object TryDates {
   def main(args: Array[String]): Unit = {
-    val d = new Date(1, 1, 2000)
-    println(s"Day of week of ${d} is ${d.dayOfWeek} and the day is ${d.day}")
+    try {
+      if (math.random() > 0.5) throw new SQLException("Bad DB")
+      val d = new Date(-1, 1, 2000)
+      println(s"Day of week of ${d} is ${d.dayOfWeek} and the day is ${d.day}")
+    } catch {
+      case x: IllegalArgumentException => // capture, instanceof and cast...
+        println(s"It broke because bad args: ${x.getMessage}")
+      case _ => println("Some other problem")
+    }
     println(s"default date is ${new Date}")
+    val h: Date = new Holiday(1, 1, 2000, "new year's day")
+
   }
 }
